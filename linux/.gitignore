@@ -2,5 +2,5 @@ flutter/ephemeral
 flutter/generated_plugins.cmake
 flutter/generated_plugin_registrant.cc
 generated_plugin_registrant.h
-
+flutter
 
