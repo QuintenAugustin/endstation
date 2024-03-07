@@ -24,12 +24,16 @@ class _GamePageState extends State<GamePage> {
   List<bool?> playerGuesses = [];
   //This is our card
   models.Card? selectedCard;
+  //Create a list for player scores
+  List<int> playerScores = [];
 
   @override
   void initState() {
     super.initState();
     deck = createDeck();
     drawCards();
+    // Initialize playerScores list with 0 for each player
+    playerScores = List<int>.generate(widget.spielerzahl, (int index) => 0);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       askPlayerGuess();
     });
@@ -96,6 +100,13 @@ class _GamePageState extends State<GamePage> {
     List<bool> results =
         playerGuesses.map((guess) => guess == isCardRed).toList();
 
+    // Update player scores based on their guess results
+    for (int i = 0; i < results.length; i++) {
+      if (results[i]) {
+        playerScores[i]++; // Increment score for correct guess
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -107,8 +118,8 @@ class _GamePageState extends State<GamePage> {
                 int idx = entry.key;
                 bool result = entry.value;
                 return Text(
-                    'Spieler ${idx + 1}: ${result ? "Richtig" : "Falsch"}');
-              }).toList(),
+                    'Spieler ${idx + 1}: ${result ? "Richtig" : "Falsch"} - Score: ${playerScores[idx]}');
+                }).toList(),
             ),
           ),
           actions: <Widget>[
