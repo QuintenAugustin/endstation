@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:endstation/models/card.dart' as models;
 import 'package:endstation/utils/deck.dart';
+import 'package:endstation/pages/game_page_round_two.dart';
 // This file contains lots of logic regarding actually drawing cards and at the bottom we have a little bit of front end.
 
 // Homepage passes the info about the player count to the game page.
@@ -37,7 +38,7 @@ class _GamePageState extends State<GamePage> {
 
   void drawCards() {
     Set<String> drawnCards = Set();
-    while (hand.length < 2) {
+    while (hand.length < 4) {
       //Hand length defines how many cards we draw
       models.Card card = deck[random.nextInt(deck.length)];
       // here we ensure that each card can only be drawn once
@@ -95,6 +96,55 @@ class _GamePageState extends State<GamePage> {
         selectedCard!.suit == 'hearts' || selectedCard!.suit == 'diamonds';
     List<bool> results =
         playerGuesses.map((guess) => guess == isCardRed).toList();
+/*
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Ergebnisse'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: results.asMap().entries.map((entry) {
+                int idx = entry.key;
+                bool result = entry.value;
+                return Text(
+                    'Spieler ${idx + 1}: ${result ? "Richtig" : "Falsch"}');
+              }).toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Spiel'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Die Karte ist verdeckt. Rate die Farbe!'),
+            SizedBox(height: 30), // Erhöhter Platz zwischen den Buttons
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+*/
 
     showDialog(
       context: context,
@@ -116,6 +166,15 @@ class _GamePageState extends State<GamePage> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GamePageRoundTwo(
+                      hand: hand,
+                      spielerzahl: widget.spielerzahl,
+                    ),
+                  ),
+                );
               },
             ),
           ],
